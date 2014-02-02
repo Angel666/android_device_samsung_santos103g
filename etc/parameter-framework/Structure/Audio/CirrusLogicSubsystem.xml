@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/Subsystem.xsd" Name="CIRRUS" Type="ALSACTL" Endianness="Little">
+	<ComponentLibrary>
+		<ComponentType Name="STEREO_SOURCE_TYPE">
+			<IntegerParameter Name="VOLUME" Size="8" Min="0" Max="63" ArrayLength="2" Mapping="Control:'%1-%2 Volume'"/>
+		</ComponentType>
+		<ComponentType Name="MONO_SOURCE_TYPE">
+			<IntegerParameter Name="VOLUME" Size="8" Min="0" Max="63" Mapping="Control:'%1-%2 Mono Volume'"/>
+		</ComponentType>
+		<ComponentType Name="MONO_MUX_SOURCE_TYPE" Extends="MONO_SOURCE_TYPE">
+			<EnumParameter Name="MUX" Size="8" Mapping="Control:'%1-%2 Mux'">
+				<ValuePair Literal="LEFT" Numerical="2"/>
+				<ValuePair Literal="RIGHT" Numerical="1"/>
+				<ValuePair Literal="MONO_MIX" Numerical="0"/>
+			</EnumParameter>
+		</ComponentType>
+
+		<ComponentType Name="LIMITER_TYPE">
+			<BooleanParameter Name="ENABLED" Mapping="Control:'%1 Limiter Switch'"/>
+			<IntegerParameter Name="MAX_THRESHOLD" Size="8" Min="0" Max="7" Mapping="Control:'%1 Limiter Max Threshold Volume'" Description="Threshold Range: [0dB, -3dB, -6dB, -9dB, -12dB, -18dB, -24dB, -30dB]"/>
+			<IntegerParameter Name="CUSHION" Size="8" Min="0" Max="7" Mapping="Control:'%1 Limiter Cushion Volume'" Description="Cushion Range: [0dB, -3dB, -6dB, -9dB, -12dB, -18dB, -24dB, -30dB]"/>
+		</ComponentType>
+		<ComponentType Name="STEREO_LIMITER_TYPE" Extends="LIMITER_TYPE">
+			<BooleanParameter Name="ALL_CHANNEL_ENABLED" Mapping="Control:'%1 Limiter All Channels Switch'"/>
+			<IntegerParameter Name="ATTACK_RATE" Size="8" Min="0" Max="63" Mapping="Control:'%1 Limiter Attack Rate'"/>
+			<IntegerParameter Name="RELEASE_RATE" Size="8" Min="0" Max="63" Mapping="Control:'%1 Limiter Release Rate'"/>
+		</ComponentType>
+		<ComponentType Name="MONO_LIMITER_TYPE" Extends="LIMITER_TYPE">
+			<IntegerParameter Name="ATTACK_RATE" Size="8" Min="0" Max="63" Mapping="Control:'%1 Limiter Attack Rate Volume'"/>
+			<IntegerParameter Name="RELEASE_RATE" Size="8" Min="0" Max="63" Mapping="Control:'%1 Limiter Release Rate Volume'"/>
+		</ComponentType>
+		<ComponentType Name="SPK_LIMITER_TYPE" Extends="MONO_LIMITER_TYPE">
+			<BooleanParameter Name="ALL_CHANNEL_ENABLED" Mapping="Control:'%1 Limiter All Channels Switch'"/>
+		</ComponentType>
+
+		<ComponentType Name="STEREO_MIXER_TYPE">
+			<Component Name="AUXILIARY_SERIAL_PORT_SOURCE" Type="STEREO_SOURCE_TYPE" Mapping="Amend2:XSP"/>
+			<Component Name="AUDIO_SERIAL_PORT_SOURCE" Type="STEREO_SOURCE_TYPE" Mapping="Amend2:ASP"/>
+			<Component Name="VOICE_SERIAL_PORT_SOURCE" Type="STEREO_SOURCE_TYPE" Mapping="Amend2:VSP"/>
+			<Component Name="INPUT_PATH_SOURCE" Type="STEREO_SOURCE_TYPE" Mapping="Amend2:IP"/>
+		</ComponentType>
+		<ComponentType Name="MONO_MIXER_TYPE">
+			<Component Name="AUXILIARY_SERIAL_PORT_SOURCE" Type="MONO_MUX_SOURCE_TYPE" Mapping="Amend2:XSP"/>
+			<Component Name="AUDIO_SERIAL_PORT_SOURCE" Type="MONO_MUX_SOURCE_TYPE" Mapping="Amend2:ASP"/>
+			<Component Name="VOICE_SERIAL_PORT_SOURCE" Type="MONO_SOURCE_TYPE" Mapping="Amend2:VSP"/>
+			<Component Name="INPUT_PATH_SOURCE" Type="MONO_SOURCE_TYPE" Mapping="Amend2:IP"/>
+		</ComponentType>
+		<ComponentType Name="MIXERS_TYPE">
+			<Component Name="AUXILIARY_SERIAL_PORT" Type="STEREO_MIXER_TYPE" Mapping="Amend1:XSP"/>
+			<Component Name="AUDIO_SERIAL_PORT" Type="STEREO_MIXER_TYPE" Mapping="Amend1:ASP"/>
+			<Component Name="VOICE_SERIAL_PORT" Type="STEREO_MIXER_TYPE" Mapping="Amend1:VSP"/>
+			<Component Name="HEADPHONE_LINE" Type="STEREO_MIXER_TYPE" Mapping="Amend1:HL"/>
+			<Component Name="EAR_SPEAKER_LINE" Type="MONO_MIXER_TYPE" Mapping="Amend1:ESL"/>
+			<Component Name="SPEAKERPHONE_LINE" Type="MONO_MIXER_TYPE" Mapping="Amend1:SPK"/>
+		</ComponentType>
+
+		<ComponentType Name="PLAYBACK_TYPE">
+			<BooleanParameter Name="DRIVER_ENABLED" Mapping="Control:'%2 Amp Switch'"/>
+		</ComponentType>
+		<ComponentType Name="ANALOG_STEREO_PLAYBACK_TYPE" Extends="PLAYBACK_TYPE">
+			<BooleanParameter Name="MUTED" ArrayLength="2" Mapping="Control:'%3 Analog Playback Switch'"/>
+			<IntegerParameter Name="VOLUME" Size="8" Min="0" Max="75" ArrayLength="2" Mapping="Control:'%3 Analog Playback Volume'"/>
+		</ComponentType>
+		<ComponentType Name="DIGITAL_MONO_PLAYBACK_TYPE" Extends="PLAYBACK_TYPE">
+			<BooleanParameter Name="MUTED" Mapping="Control:'%3 Digital Playback Switch'"/>
+			<IntegerParameter Name="VOLUME" Size="8" Min="0" Max="228" Mapping="Control:'%3 Digital Playback Volume'"/>
+		</ComponentType>
+		<ComponentType Name="DIGITAL_STEREO_PLAYBACK_TYPE" Extends="PLAYBACK_TYPE">
+			<BooleanParameter Name="MUTED" ArrayLength="2" Mapping="Control:'%3 Digital Playback Switch'"/>
+			<IntegerParameter Name="VOLUME" Size="8" Min="0" Max="228" ArrayLength="2" Mapping="Control:'%3 Digital Playback Volume'"/>
+		</ComponentType>
+
+		<ComponentType Name="LINE">
+			<BooleanParameter Name="LOOPBACK_DISABLED" Mapping="Control:'%1 Loopback'"/>
+		</ComponentType>
+
+		<ComponentType Name="STEREO_ANALOG_LINEOUT" Extends="LINE">
+			<Component Name="LIMITER" Type="STEREO_LIMITER_TYPE"/>
+			<Component Name="HEADPHONE" Type="ANALOG_STEREO_PLAYBACK_TYPE" Mapping="Amend2:HP,Amend3:Headphone"/>
+			<Component Name="LINEOUT" Type="DIGITAL_STEREO_PLAYBACK_TYPE" Mapping="Amend2:LO,Amend3:HL"/>
+		</ComponentType>
+		<ComponentType Name="ESL_MONO_ANALOG_LINEOUT" Extends="LINE">
+			<Component Name="LIMITER" Type="MONO_LIMITER_TYPE"/>
+			<Component Name="EARPIECE" Type="DIGITAL_MONO_PLAYBACK_TYPE" Mapping="Amend2:EAR,Amend3:Ear Speaker"/>
+		</ComponentType>
+		<ComponentType Name="SPK_MONO_ANALOG_LINEOUT" Extends="LINE">
+			<Component Name="LIMITER" Type="SPK_LIMITER_TYPE"/>
+			<Component Name="SPEAKERPHONE" Type="DIGITAL_MONO_PLAYBACK_TYPE" Mapping="Amend2:SPK,Amend3:Speakerphone"/>
+			<Component Name="LINEOUT" Type="ANALOG_STEREO_PLAYBACK_TYPE" Mapping="Amend2:SPKLO,Amend3:LineOut"/>
+		</ComponentType>
+
+		<ComponentType Name="OUTPUTS">
+			<Component Name="HEADPHONE_LINE" Type="STEREO_ANALOG_LINEOUT" Mapping="Amend1:HL"/>
+			<Component Name="EAR_SPEAKER" Type="ESL_MONO_ANALOG_LINEOUT" Mapping="Amend1:ESL"/>
+			<Component Name="SPEAKER_LINE" Type="SPK_MONO_ANALOG_LINEOUT" Mapping="Amend1:SPK"/>
+			<ParameterBlock Name="SERIAL_PORTS">
+				<EnumParameter Name="AUXILIARY" Size="8" Mapping="Control:'XSPOUT Mono/Stereo Select'">
+					<ValuePair Literal="Mono" Numerical="0"/>
+					<ValuePair Literal="Stereo" Numerical="1"/>
+				</EnumParameter>
+				<EnumParameter Name="VOICE" Size="8" Mapping="Control:'VSPOUT Mono/Stereo Select'">
+					<ValuePair Literal="Mono" Numerical="0"/>
+					<ValuePair Literal="Stereo" Numerical="1"/>
+				</EnumParameter>
+			</ParameterBlock>
+		</ComponentType>
+
+		<ComponentType Name="INPUT_PATH_TYPE">
+			<BooleanParameter Name="MUTED" ArrayLength="2" Mapping="Control:'Input Path Digital Switch'" Description="Input Path Digital Switch"/>
+			<IntegerParameter Name="VOLUME" Size="8" Min="0" Max="108" ArrayLength="2" Mapping="Control:'Input Path Digital Volume'"/>
+			<EnumParameter Name="MONO_CHANNEL_CONFIGURATION" Size="8" Mapping="Control:'IP Digital Swap/Mono Select'">
+				<ValuePair Literal="Stereo" Numerical="0"/>
+				<ValuePair Literal="Mono_A" Numerical="1"/>
+				<ValuePair Literal="Mono_B" Numerical="2"/>
+				<ValuePair Literal="Swap_A-B" Numerical="3"/>
+			</EnumParameter>
+			<ParameterBlock Name="CAPTURE_DEVICE">
+				<ParameterBlock Name="LEFT_INPUT">
+					<EnumParameter Name="TYPE" Size="8" Mapping="Control:'Input Left Capture'">
+						<ValuePair Literal="None" Numerical="0"/>
+						<ValuePair Literal="ADC_A" Numerical="1"/>
+						<ValuePair Literal="DMIC_A" Numerical="2"/>
+					</EnumParameter>
+				</ParameterBlock>
+				<ParameterBlock Name="RIGHT_INPUT">
+					<EnumParameter Name="TYPE" Size="8" Mapping="Control:'Input Right Capture'">
+						<ValuePair Literal="None" Numerical="0"/>
+						<ValuePair Literal="ADC_B" Numerical="1"/>
+						<ValuePair Literal="DMIC_B" Numerical="2"/>
+					</EnumParameter>
+				</ParameterBlock>
+				<ParameterBlock Name="ADC">
+					<BooleanParameter Name="POLARITY_INVERTED" ArrayLength="2" Mapping="Control:'ADC Signal Polarity Switch'"/>
+					<ParameterBlock Name="BOOST">
+						<BooleanParameter Name="A_ENABLED" Mapping="Control:'ADC A Boost Volume'"/>
+						<BooleanParameter Name="B_ENABLED" Mapping="Control:'ADC B Boost Volume'"/>
+					</ParameterBlock>
+					<ParameterBlock Name="PGA">
+						<BooleanParameter Name="SOFT_RAMP_ENABLED" Mapping="Control:'PGA Soft-Ramp Switch'"/>
+						<IntegerParameter Name="INPUT_ANALOG_VOLUME" Size="8" Min="0" Max="36" ArrayLength="2" Mapping="Control:'Input PGA Analog Volume'"/>
+						<BooleanParameter Name="MIC_PREAMP_ENABLED" Size="8" ArrayLength="2" Mapping="Control:'MIC Preamp Switch'" Description="Preamp: [+10dB, +20dB]"/>
+					</ParameterBlock>
+					<ParameterBlock Name="MUX">
+						<EnumParameter Name="MUX_LEFT" Size="8" Mapping="Control:'PGA Left Mux'">
+							<ValuePair Literal="LINE_A" Numerical="0"/>
+							<ValuePair Literal="MIC1" Numerical="1"/>
+						</EnumParameter>
+						<EnumParameter Name="MUX_RIGHT" Size="8" Mapping="Control:'PGA Right Mux'">
+							<ValuePair Literal="LINE_B" Numerical="0"/>
+							<ValuePair Literal="MIC2" Numerical="1"/>
+						</EnumParameter>
+					</ParameterBlock>
+				</ParameterBlock>
+			</ParameterBlock>
+			<ParameterBlock Name="AUDIO_LEVEL_CONTROL">
+				<BooleanParameter Name="ENABLED" ArrayLength="2" Mapping="Control:'ALC Switch'"/>
+				<IntegerParameter Name="ATTACK_RATE" Size="8" Min="0" Max="63" Mapping="Control:'ALC Attack Rate Volume'"/>
+				<IntegerParameter Name="RELEASE_RATE" Size="8" Min="0" Max="63" Mapping="Control:'ALC Release Rate Volume'"/>
+				<ParameterBlock Name="THRESHOLD">
+					<IntegerParameter Name="MIN" Size="8" Min="0" Max="7" Mapping="Control:'ALC Min Threshold Volume'" Description="Threshold Range: [0dB, -3dB, -6dB, -9dB, -12dB, -18dB, -24dB, -30dB]"/>
+					<IntegerParameter Name="MAX" Size="8" Min="0" Max="7" Mapping="Control:'ALC Max Threshold Volume'" Description="Threshold Range: [0dB, -3dB, -6dB, -9dB, -12dB, -18dB, -24dB, -30dB]"/>
+				</ParameterBlock>
+			</ParameterBlock>
+
+			<ParameterBlock Name="NOISE_GATE">
+				<BooleanParameter Name="ENABLED" ArrayLength="2" Mapping="Control:'NG Enable Switch'"/>
+				<BooleanParameter Name="BOOST_ENABLED" Mapping="Control:'NG Boost Switch'"/>
+				<IntegerParameter Name="THRESHOLD" Size="8" Min="0" Max="7" Mapping="Control:'NG Threshold'" Description="Threshold Range: [-64dB, -66dB, -70dB, -73dB, -76dB, -82dB, Reserved1, Reserved2]"/>
+				<IntegerParameter Name="DELAY" Size="8" Min="0" Max="3" Mapping="Control:'NG Delay'" Description="Delay Range: [50ms, 100ms, 150ms, 200ms]"/>
+			</ParameterBlock>
+		</ComponentType>
+
+		<ComponentType Name="SSP_PORT" Description="Voice or Virtual Port">
+			<!--BooleanParameter Name="PCM_MASTER" Mapping="Control:'PCM1 Mode'"/-->
+			<ParameterBlock Name="CONFIG" Mapping="PortConfig">
+				<BooleanParameter Name="PLAYBACK_ENABLED"/>
+				<BooleanParameter Name="CAPTURE_ENABLED"/>
+				<EnumParameter Name="FORMAT" Size="8">
+					<ValuePair Literal="S16LE" Numerical="2"/>
+				</EnumParameter>
+				<IntegerParameter Name="CHANNEL_NUMBER" Size="8" Min="1" Max="2"/>
+				<IntegerParameter Name="SAMPLE_RATE" Size="16"/>
+			</ParameterBlock>
+		</ComponentType>
+
+		<ComponentType Name="SOUND_CARD">
+			<Component Name="INPUT" Type="INPUT_PATH_TYPE" Description="MIC/Line Input Path"/>
+			<Component Name="OUTPUT" Type="OUTPUTS"/>
+			<Component Name="MIXER" Type="MIXERS_TYPE"/>
+			<ParameterBlock Name="PATH_CONTROL">
+				<ParameterBlock Name="SOFT_RAMP">
+					<BooleanParameter Name="ANALOG_ENABLED" Mapping="Control:'Analog Output Soft-Ramp Switch'"/>
+					<BooleanParameter Name="DIGITAL_ENABLED" Mapping="Control:'Digital Soft-Ramp Switch'"/>
+				</ParameterBlock>
+				<BooleanParameter Name="OUTPUT_ANALOG_ZERO_CROSS_ENABLED" Mapping="Control:'Analog Zero Cross Switch'"/>
+			</ParameterBlock>
+			<Component Name="VOICE_PORT" Type="SSP_PORT" Mapping="Device:1"/>
+			<Component Name="VIRTUAL_ASP_PORT" Type="SSP_PORT" Mapping="Device:6" Description="Virtual ASP Port"/>
+		</ComponentType>
+	</ComponentLibrary>
+	<InstanceDefinition>
+		<Component Name="SOUND_CARD" Type="SOUND_CARD" Mapping="Card:cloverviewaudio"/>
+	</InstanceDefinition>
+</Subsystem>

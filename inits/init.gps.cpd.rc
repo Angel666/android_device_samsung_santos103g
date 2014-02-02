@@ -1,0 +1,5 @@
+# launch CP deamon
+service cpdd /system/bin/cpdd
+    class core
+    group system inet radio
+    user system

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConfigurableDomains xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/ConfigurableDomains.xsd" SystemClassName="Misc">
+	<ConfigurableDomain Name="VibratorState">
+		<Configurations>
+			<Configuration Name="Off">
+				<CompoundRule Type="All">
+					<SelectionCriterionRule SelectionCriterion="VibratorState" MatchesWhen="Is" Value="Off"/>
+				</CompoundRule>
+			</Configuration>
+			<Configuration Name="On">
+				<CompoundRule Type="All">
+					<SelectionCriterionRule SelectionCriterion="VibratorState" MatchesWhen="Is" Value="On"/>
+				</CompoundRule>
+			</Configuration>
+		</Configurations>
+		<ConfigurableElements>
+			<ConfigurableElement Path="/Misc/VIBRATOR/STATE/ENABLED"/>
+		</ConfigurableElements>
+		<Settings>
+			<Configuration Name="Off">
+				<ConfigurableElement Path="/Misc/VIBRATOR/STATE/ENABLED">
+					<BooleanParameter Name="ENABLED">0</BooleanParameter>
+				</ConfigurableElement>
+			</Configuration>
+			<Configuration Name="On">
+				<ConfigurableElement Path="/Misc/VIBRATOR/STATE/ENABLED">
+					<BooleanParameter Name="ENABLED">1</BooleanParameter>
+				</ConfigurableElement>
+			</Configuration>
+		</Settings>
+	</ConfigurableDomain>
+</ConfigurableDomains>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/Subsystem.xsd" Name="AUDIENCE" Type="AUDIENCE" Endianness="Little">
+    <ComponentLibrary/>
+    <InstanceDefinition>
+        <ParameterBlock Name="CONFIGURATION" Mapping="Config">
+            <BooleanParameter Name="KEEP_AWAKE"/>
+            <StringParameter Name="PRESET_FILE" MaxLength="256"/>
+        </ParameterBlock>
+    </InstanceDefinition>
+</Subsystem>

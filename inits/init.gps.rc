@@ -1,0 +1,25 @@
+import init.gps.cpd.rc
+
+on post-fs
+    ## CSR GPS setup
+    ## RESET gpio and UART
+    write /sys/class/gpio/export 92
+    write /sys/class/gpio/gpio92/direction out
+    write /sys/class/gpio/gpio92/value 1
+    chmod 0664 /sys/class/gpio/gpio92/value
+    chown system system /sys/class/gpio/gpio92/value
+
+    ## CSR GSD5t ON/OFF GPIO
+    write /sys/class/gpio/export 59
+    write /sys/class/gpio/gpio59/direction out
+    write /sys/class/gpio/gpio59/value 0
+    chmod 0664 /sys/class/gpio/gpio59/value
+    chown system system /sys/class/gpio/gpio59/value
+
+    ## UART3
+    chmod 0660 /dev/ttyMFD3
+    chown system system /dev/ttyMFD3
+
+    ## UART PM, it is 05.1 for ttyMFD3
+    chmod 0664 /sys/devices/pci0000:00/0000:00:05.1/power/control
+    chown system system /sys/devices/pci0000:00/0000:00:05.1/power/control

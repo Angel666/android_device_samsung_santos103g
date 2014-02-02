@@ -1,0 +1,76 @@
+#
+#	how to read floating point comments
+#
+#	u : unsigned, s : signed
+#	u0.16 : unsigned int (16 bit) and its number of decimals is 16
+#			-> (2^16-1) means (2^16-1)/(2^16) = 0.999984....
+#	u8.8  : unsigned int (16 bit) and its number of decimals is 8
+#			-> (2^16-1) means (2^16-1)/(2^8) = 255.996093....
+#	s0.15 : signed int (16bit) and the 1-th MSB is sign bit and the number of decimals is 15
+#			-> (2^15 + x) means -(x/(2^15))
+#	uint8 : unsigned int (8 bit, 0 <= range <= 2^8-1)
+#	uint16 : unsigned int (16 bit, 0 <= range <= 2^16-1)
+#	boolean : value which can take value only 0 or 1
+#
+muiWbGainSf	1	# uint16
+muiWbGainTblGr	32768	# u[muiWbGainSf].[16-muiWbGainSf]
+muiWbGainTblRr	32768	# u[muiWbGainSf].[16-muiWbGainSf]
+muiWbGainTblBb	32768	# u[muiWbGainSf].[16-muiWbGainSf]
+muiWbGainTblGb	32768	# u[muiWbGainSf].[16-muiWbGainSf]
+muiAecYcoefR	25559	# u0.16
+muiAecYcoefG	32768	# u0.16
+muiAecYcoefB	7209	# u0.16
+# AWB level gate for raw: if 'pixel <= High', pixel can pass level gate
+muiAwbLgHighRaw	65535	# u0.16
+# AWB level gate: if 'Low <= pixel <= High', pixel can pass level gate
+muiAwbLgLow	0	# u0.16
+muiAwbLgHigh	65535	# u0.16
+#msiAfcFir1	-3344,-6104,-19143,19143,6104,3344,0	# s0.15
+#msiAfcFir1	-579,-3232,-7680,22982,-7680,-3232,-579 #	s0.15
+msiAfcFir1 -1412,-3979,-6776,24334,-6776,-3979,-1412
+msiAfcFir2	-579,-3232,-7680,22982,-7680,-3232,-579 #	s0.15
+#msiAfcFir2	1027,0,-9219,16384,-9219,1027,0		# s0.15
+muiDePixelNoise	0	# u0.16
+msqMorTbl
+muiCcSft	2	# uint16
+muiCsSft	0	# uint16
+msiCcMtx	18055,-10503,639,-2691,14313,-3430,-663,-6043,14898		# s[muiCcSft].[15-muiCcSft]
+msiCsMtx	9798,19235,3736,-5529,-10855,16384,16384,-13720,-2664	# s[muiCcSft].[15-muiCcSft]
+msiStMaccMtx	7793,-2881,0,6352,5328,2049,-1026,8404,4465,2912,-5821,13199,10289,0,1001,9788,9788,0,-2,9788,9700,-44,1278,10428,25581,15837,-4529,4621,18164,1003,1832,17343,18164,-10702,1832,9149,12813,0,0,12813,12158,655,-1309,14122,11474,997,-4757,15846,14807,997,6067,15846,3571,-4621,9241,17433,8191,-1,0,8192,7793,-797,0,8192   # s2.13
+muiUVLevelMin	0	# uint8
+muiUVLevelMax	255	# uint8
+muiCeAuto	0	# boolean
+muiCeGain	/etc/atomisp/CGamma_DIS5MP.bin	# uint16 in bin file
+muiGmVal	384	# u8.8
+muiGmToe	123	# u0.16
+muiGmKne	287	# u0.16
+muiGmDyr	256	# u8.8
+muiGmLevelMin	0	# uint8
+muiGmLevelMax	255	# uint8
+muiGmTbl	/etc/atomisp/YGamma_DIS5MP.bin	# uint16 in bin file
+muiYuvGmGainK1	19000	# u0.16
+muiYuvGmGainK2	19000	# u0.16
+mblObMode	1,1,1,1,1	# boolean
+muiObBLGr       1024,1024,1024,1024,1024        # u0.16
+muiObBLRr       1024,1024,1024,1024,1024        # u0.16
+muiObBLBb       1024,1024,1024,1024,1024        # u0.16
+muiObBLGb       1024,1024,1024,1024,1024        # u0.16
+muiObSttp	0,0,0,0,0	# uint16
+muiObEndp	0,0,0,0,0	# uint16
+muiDpThres	8192,8192,8192,8192,8192	# u0.16
+muiDpGain	4096,4096,3072,2048,2048	# u8.8
+muiBNrGain	8192,8704,9216,16384,16384	# u0.16
+muiYNrGain	8192,8704,9216,16384,16384	# u0.16
+muiNrDir	256,512,768,1280,1536		# u0.16
+muiNrThCb	64,80,96,112,128	# u0.16
+muiNrThCr	64,80,96,112,128	# u0.16
+muiEeGain	4096,3840,3584,3328,3072	# u5.11
+muiEeNois	64,96,128,256,512		# u8.8
+muiEeDetl	2048,2048,2048,2048,2048	# u5.11
+muiTrGain	24576,24576,24576,24576,24576	# u0.16
+muiTrThrY	1536,1536,1536,1536,1536	# u0.16
+muiTrThrUV	2048,2048,2048,2048,2048	# u0.16
+muiXrThrs	4096,6144,8192,12288,16384	# u0.16
+muiWbGainWR	1024
+muiWbGainWG	1024
+muiWbGainWB	1024

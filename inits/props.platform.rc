@@ -1,0 +1,33 @@
+# clovertrail specific SPID based properties
+
+# Intel:Intel:*:Clovertrail:Redhookbay:VV0
+on property:ro.boot.spid=0000:0000:*:0002:?000:0000
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV1
+on property:ro.boot.spid=0000:0000:*:0002:?000:0001
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV2
+on property:ro.boot.spid=0000:0000:*:0002:?000:0002
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV1-P
+on property:ro.boot.spid=0000:0000:*:0002:?000:0007
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV3
+on property:ro.boot.spid=0000:0000:*:0002:?000:0010
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV2-VB
+on property:ro.boot.spid=0000:0000:*:0002:?000:0014
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV3a
+on property:ro.boot.spid=0000:0000:*:0002:?000:001D
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV3b
+on property:ro.boot.spid=0000:0000:*:0002:?000:001E
+	setprop ro.spid.wifi.nvram vv
+# Intel:Intel:*:Clovertrail:RedHookBay:VV3c
+on property:ro.boot.spid=0000:0000:*:0002:?000:001F
+	setprop ro.spid.wifi.nvram vv
+
+# Intel:Intel:*:Clovertrail:*:*
+on property:ro.boot.spid=0000:0000:*:0002:*:*
+	setprop ro.spid.gps.tty ttyMFD3

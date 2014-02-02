@@ -1,0 +1,71 @@
+#
+#	how to read floating point comments
+#
+#	u : unsigned, s : signed
+#	u0.16 : unsigned int (16 bit) and its number of decimals is 16
+#			-> (2^16-1) means (2^16-1)/(2^16) = 0.999984....
+#	u8.8  : unsigned int (16 bit) and its number of decimals is 8
+#			-> (2^16-1) means (2^16-1)/(2^8) = 255.996093....
+#	s0.15 : signed int (16bit) and the 1-th MSB is sign bit and the number of decimals is 15
+#			-> (2^15 + x) means -(x/(2^15))
+#	uint8 : unsigned int (8 bit, 0 <= range <= 2^8-1)
+#	uint16 : unsigned int (16 bit, 0 <= range <= 2^16-1)
+#	boolean : value which can take value only 0 or 1
+#
+muiAecYcoefR	25559	# u0.16
+muiAecYcoefG	32768	# u0.16
+muiAecYcoefB	7209	# u0.16
+# AWB level gate for raw: if 'pixel <= High', pixel can pass level gate
+muiAwbLgHighRaw	65535	# u0.16
+# AWB level gate: if 'Low <= pixel <= High', pixel can pass level gate
+muiAwbLgLow	0	# u0.16
+muiAwbLgHigh	65535	# u0.16
+msiAfcFir1	-6689,-12207,-32768,32767,12207,6689,0	# s0.15
+msiAfcFir2	2053,0,-18437,32767,-18437,2053,0	# s0.15
+muiDePixelNoise	0	# u0.16
+muiCcSft	2	# uint16
+muiCsSft	0	# uint16
+msiCcMtx	18055,-10503,639,-2691,14313,-3430,-663,-6043,14898		# s[muiCcSft].[15-muiCcSft]
+msiCsMtx	9798,19235,3736,-5529,-10855,16384,16384,-13720,-2664	# s[muiCcSft].[15-muiCcSft]
+msiStMaccMtx	8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192,8192,0,0,8192	# s2.13
+muiUVLevelMin	0	# uint8
+muiUVLevelMax	255	# uint8
+muiCeAuto	1	# boolean
+#muiCeGain	/etc/atomisp/CGamma_DIS5MP.bin	# uint16 in bin file
+muiGmVal	384	# u8.8
+muiGmToe	123	# u0.16
+muiGmKne	287	# u0.16
+muiGmDyr	256	# u8.8
+muiGmLevelMin	0	# uint8
+muiGmLevelMax	255	# uint8
+#muiGmTbl	/etc/atomisp/YGamma_DIS5MP.bin	# uint16 in bin file
+muiYuvGmGainK1	0	# u0.16
+muiYuvGmGainK2	0	# u0.16
+msqMorTbl	/etc/atomisp/Mor_14MP_8BQ.txt
+muiDpThres	8192,8192,4096,4096,4096	# u0.16
+muiDpGain	2048,2048,2048,1024,1024	# u8.8
+muiBNrGain	16384,18432,20480,24576,32768	# u0.16
+muiYNrGain	8192,9216,10240,12288,16384		# u0.16
+muiNrDir	1280,1760,2240,3200,5120	# u0.16
+muiNrThCb	0,16,32,64,128	# u0.16
+muiNrThCr	0,16,32,64,128	# u0.16
+muiEeGain	8192,7936,7680,7168,6144	# u5.11
+muiEeNois	128,176,224,320,512	# u8.8
+muiEeDetl	2048,2048,2048,2048,2048	# u5.11
+muiTrGain	32768,32768,32768,32768,32768	# u0.16
+muiTrThrY	256,256,256,256,256	# u0.16
+muiTrThrUV	256,256,256,256,256	# u0.16
+muiXrThrs	0,1024,2048,4096,8192	# u0.16
+muiWbGainSf	1	# uint16
+muiWbGainTblGr	32768	# u[muiWbGainSf].[16-muiWbGainSf]
+muiWbGainTblRr	40299	# u[muiWbGainSf].[16-muiWbGainSf]
+muiWbGainTblBb	52788	# u[muiWbGainSf].[16-muiWbGainSf]
+muiWbGainTblGb	32768	# u[muiWbGainSf].[16-muiWbGainSf]
+mblObMode	1	# boolean
+muiObBLGr	16	# u0.16
+muiObBLRr	16	# u0.16
+muiObBLBb	16	# u0.16
+muiObBLGb	16	# u0.16
+muiObSttp	0	# uint16
+muiObEndp	0	# uint16
+#msqRawBlackFrame	/etc/atomisp/noise.fpn

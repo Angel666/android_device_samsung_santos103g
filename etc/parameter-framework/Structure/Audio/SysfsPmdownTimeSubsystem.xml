@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/Subsystem.xsd" Name="CODECFS" Type="FS" Endianness="Little">
+	<ComponentLibrary>
+		<ComponentType Name="SYSFS_FILE">
+                        <IntegerParameter Name="TIME" Size="16" Unit="usec" Min="0" Max="5000" Mapping="File:pmdown_time"/>
+		</ComponentType>
+	</ComponentLibrary>
+	<InstanceDefinition>
+		<Component Name="ASP_PMDOWN" Type="SYSFS_FILE" Mapping="Directory:/sys/devices/platform/ctp_rhb_cs42l73/Cloverview virtual-ASP/"/>
+	</InstanceDefinition>
+</Subsystem>

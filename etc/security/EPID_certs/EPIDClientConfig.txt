@@ -1,0 +1,9 @@
+epidparamcertfilepath = /system/etc/security/EPID_certs/epid_paramcert.dat
+legacygroupcertfilepath = /system/etc/security/EPID_certs/EPIDGroupLegacy.cer
+x509groupcertfilepath = /system/etc/security/EPID_certs/EpidCertX509.cer
+group2093certfilepath = /system/etc/security/EPID_certs/Group_2093_Public_Key.cer
+group2094certfilepath = /system/etc/security/EPID_certs/Group_2094_Public_Key.cer
+group1241certfilepath = /system/etc/security/EPID_certs/Group_1241_Public_Key.cer
+legacygroup2093certfilepath = /system/etc/security/EPID_certs/Group_2093_Legacy.cer
+legacygroup2094certfilepath = /system/etc/security/EPID_certs/Group_2094_Legacy.cer
+legacygroup1241certfilepath = /system/etc/security/EPID_certs/Group_1241_Legacy.cer

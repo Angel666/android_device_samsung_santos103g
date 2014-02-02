@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright (C) 2012 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<!-- warning: please don't release unnecessary elements, that will have impatct to the performance -->
+<!-- Profiles, cameraId="0" or "1", examples for the elements
+        <sensorType value="SENSOR_TYPE_SOC"/>
+        <facing value="CAMERA_FACING_FRONT"/>
+        <orientation value="270"/>
+        <dvs value="false"/>
+        <flipping value="SENSOR_FLIP_H" value_v="SENSOR_FLIP_V"/>
+        <supportedSnapshotSizes value="320x240,640x480,1280x720"/>
+        <supportedPreviewSizes value="1024x576,720x480,640x480,640x360,352x288,320x240,176x144"/>
+        <supportedVideoSizes value="176x144,320x240,352x288,640x480,720x480,1280x720"/>
+
+        <defaultBurstLength value="10"/>
+        <supportedBurstLength value="10"/>
+        <supportedSceneModes value="auto,portrait,sports,landscape,night,fireworks,barcode"/>
+        <defaultSceneMode value="auto,portrait,sports,landscape,night,fireworks,barcode"/>
+        <defaultFlashMode value="off"/>
+        <supportedFlashModes value="auto,off,on,torch"/>
+        <supportedEffectModes value="none,mono,negative,sepia"/>
+        <supportedIntelEffectModes value="none,mono,negative,sepia,vivid,still-sky-blue,still-grass-green,still-skin-whiten-low,still-skin-whiten-medium,still-skin-whiten-high"/>
+        <supportedAwbModes value="auto,incandescent,fluorescent,daylight,cloudy-daylight"/>
+        <defaultAwbMode value="auto"/>
+        <maxEV value="0"/>
+        <minEV value="0"/>
+        <stepEV value="0"/>
+        <defaultEV value="0"/>
+        <defaultIso value="iso-auto"/>
+        <supportedIso value="iso-auto,iso-100,iso-200,iso-400,iso-800"/>
+        <defaultAeMetering value="auto"/>
+        <supportedAeMetering value="auto,center,spot"/>
+        <defaultFocusMode value="auto"/>
+        <supportedFocusModes value="auto,infinity,fixed,macro,continuous-video,continuous-picture"/>
+        <maxBurstFPS value="15"/>
+        <supportedBurstFPS value="1,3,5,7,15"/>
+        <previewViaOverlay value="false"/>
+        <VFPPLimitedResolutionList value="1024x768"/>
+        <overlayRelativeRotation value="90"/>
+        <maxSaturation value=""/>
+        <minSaturation value=""/>
+        <stepSaturation value=""/>
+        <defaultSaturation value=""/>
+        <supportedSaturation value=""/>
+        <maxContrast value=""/>
+        <minContrast value=""/>
+        <stepContrast value=""/>
+        <defaultContrast value=""/>
+        <supportedContrast value=""/>
+        <maxSharpness value=""/>
+        <minSharpness value=""/>
+        <stepSharpness value=""/>
+        <defaultSharpness value=""/>
+        <supportedSharpness value=""/>
+        <defaultEffectMode value="none"/>
+        <supportedPreviewFrameRate value="30,15,10"/>
+        <supportedPreviewFPSRange value="(10500,30304),(11000,30304),(11500,30304)"/>
+        <defaultPreviewFPSRange value="10500,30304"/>
+        <supportedPreviewUpdateModes value="standard,continuous,during-capture,windowless"/>
+        <defaultPreviewUpdateMode value="standard"/>
+        <hasSlowMotion value="false"/>
+		<hasPostView value="true"/>
+-->
+
+<!-- Common, examples for the elements
+        <subDevName value="/dev/v4l-subdev8"/>
+        <fileInject value="true"/>
+        <backFlash value="true"/>
+        <continuousCapture value="true"/>
+        <maxContinuousRawRingBuffer value="10"/>
+        <productName value="ExampleModel"/>
+        <manufacturerName value="ExampleMaker"/>
+        <maxZoomFactor value="64"/>
+        <videoPreviewSizePref value="1024x576"/>
+        <boardName value="redhookbay"/>
+        <supportVideoSnapshot value="true"/>
+        <numRecordingBuffers value="9"/>
+        <supportAIQ value="false"/>
+        <shutterLagCompensationMs value="80"/>
+        <mPanoramaMaxSnapshotCount value="10"/>
+        <previewFormat value="V4L2_PIX_FMT_YVU420"/>
+-->
+
+<CameraSettings>
+    <Profiles cameraId="0">
+        <sensorType value="SENSOR_TYPE_SOC"/> <!-- SENSOR_TYPE_SOC or SENSOR_TYPE_RAW -->
+		<facing value="CAMERA_FACING_BACK"/> <!-- CAMERA_FACING_FRONT or CAMERA_FACING_BACK -->
+        <orientation value="0"/> <!-- one of 0,90,180,270 -->
+        <dvs value="false"/>
+        <supportedBurstLength value=""/>
+        <maxEV value="4"/>
+        <minEV value="-4"/>
+        <stepEV value="1"/>
+        <supportedSnapshotSizes value="640x480,960x720,1280x720,1280x960,1536x864,1600x1200,2048x1152,2048x1536"/>
+        <supportedPreviewSizes value="1024x768,1024x576,800x600,720x480,640x480,352x288,320x240,176x144"/>
+        <supportedVideoSizes value="176x144,320x240,352x288,640x480,720x480,1280x720"/>
+
+		<VFPPLimitedResolutionList value="1024x768,1024x576"/>
+		
+        <defaultFocusMode value="fixed"/>
+        <supportedFocusModes value="fixed"/>
+
+        <flipping value="" value_v=""/>
+        <previewViaOverlay value="false"/>
+        <supportedBurstLength value=""/>
+
+        <supportedSceneModes value="auto,portrait,sports,landscape,night,fireworks,barcode,party,beach,sunset,candlelight,dusk-dawn,fall-color,back-light"/>
+        <defaultFlashMode value="off"/>
+        <supportedFlashModes value="off"/>
+        <supportedAeMetering value="matrix,spot,center"/>
+
+        <maxSaturation value="2"/>
+        <minSaturation value="-2"/>
+        <stepSaturation value="0.5"/>
+        <defaultSaturation value="0"/>
+        <maxContrast value="2"/>
+        <minContrast value="-2"/>
+        <stepContrast value="0.5"/>
+        <defaultContrast value="0"/>
+        <maxSharpness value="2"/>
+        <minSharpness value="-2"/>
+        <stepSharpness value="0.5"/>
+        <defaultSharpness value="0"/>
+    <hasPostView value="false"/> <!-- true or false -->
+    </Profiles>
+
+    <Profiles cameraId="1">
+        <sensorType value="SENSOR_TYPE_SOC"/> <!-- SENSOR_TYPE_SOC or SENSOR_TYPE_RAW -->
+        <facing value="CAMERA_FACING_FRONT"/> <!-- CAMERA_FACING_FRONT or CAMERA_FACING_BACK -->
+        <orientation value="0"/> <!-- one of 0,90,180,270 -->
+        <dvs value="false"/>
+        <previewViaOverlay value="false"/>
+        <overlayRelativeRotation value="0"/>
+        <flipping value="" value_v=""/>
+        <supportedSnapshotSizes value="640x480,960x720,1280x960"/>
+        <supportedPreviewSizes value="640x480,352x288,320x240,176x144"/>
+        <supportedVideoSizes value="176x144,320x240,352x288,640x480"/>
+
+        <defaultFocusMode value="fixed"/>
+        <supportedFocusModes value="fixed"/>
+
+        <defaultBurstLength value=""/>
+        <supportedBurstLength value=""/>
+        <supportedSceneModes value="auto"/>
+        <defaultSceneMode value="auto"/>
+        <defaultFlashMode value="off"/>
+        <supportedFlashModes value="off"/>
+        <defaultAwbMode value="auto"/>
+        <maxEV value="4"/>
+        <minEV value="-4"/>
+        <stepEV value="1"/>
+                <defaultIso value=""/>
+        <supportedIso value=""/>
+        <defaultAeMetering value=""/>
+        <supportedAeMetering value=""/>
+        <hasPostView value="false"/> <!-- true or false -->
+        </Profiles>
+
+    <Common>
+        <subDevName value="/dev/v4l-subdev8"/>
+        <fileInject value="false"/>
+        <backFlash value="false"/>
+        <continuousCapture value="false"/>
+        <maxContinuousRawRingBuffer value="10"/>
+        <productName value="ExampleModel"/>
+        <manufacturerName value="ExampleMaker"/>
+        <maxZoomFactor value="64"/>
+        <videoPreviewSizePref value="640x480"/>
+        <boardName value="tw"/>
+    </Common>
+</CameraSettings>

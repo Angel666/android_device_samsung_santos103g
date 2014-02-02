@@ -1,0 +1,21 @@
+# Put Matrix driver device interface to diag grp
+/dev/matrix               0640   root       diag
+
+# modem tty node change to radio user can read and write
+/dev/gsmtty*              0660   radio      system
+/dev/ttyMFD*              0660   radio      system
+
+# Audience device to audio group
+/dev/audience_es305       0770   audio      audio
+/dev/intel_sst_ctrl       0600   media      media
+
+# The Intel camera device node should not be world writable/readable.
+/dev/video*               0660   root       camera
+/dev/v4l-subdev*          0660   root       camera
+/dev/media*               0660   root       camera
+
+# Device needed by shared transport layer (used by bluetooth, FM and GPS)
+/dev/hci_tty              0660   bluetooth  bluetooth
+
+# Intel SCU watchdog
+/dev/watchdog             0600   system     system

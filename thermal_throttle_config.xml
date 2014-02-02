@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Thermal Management Configuration File -->
+<!--  Intel Corporation 2011-2012  -->
+<thermalthrottleconfig>
+  <!--Cooling Devices-->
+  <ContributingDeviceInfo>
+    <CDeviceName>CPU</CDeviceName>
+    <CDeviceID>1</CDeviceID>
+    <CDeviceClassPath>android.thermal.CPUMaxFreqControl</CDeviceClassPath>
+    <CDeviceThrottlePath>/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq</CDeviceThrottlePath>
+  </ContributingDeviceInfo>
+  <!--Map the cooling devices with specfic zones for throttling-->
+  <ZoneThrottleInfo>
+    <ZoneID>0</ZoneID>
+    <CriticalShutDown>0</CriticalShutDown>
+    <!--set CriticalShutDown to 1, if platform needs to shutdown
+        if this zone reaches critical thermal state to avoid any user impact-->
+    <!--list of cooling device IDs registered for the zone-->
+    <CoolingDeviceInfo>
+      <CoolingDevId>1</CoolingDevId>
+      <ThrottleDeviceMask>
+          <Normal>0</Normal>
+          <Warning>0</Warning>
+          <Alert>0</Alert>
+          <Critical>1</Critical>
+      </ThrottleDeviceMask>
+      <!--four states: Normal,Warning,Alert,Critical. 0 - disable throttling,1 - enable throttling, -1 - dont care-->
+      <DethrottleDeviceMask>
+          <Normal>1</Normal>
+          <Warning>0</Warning>
+          <Alert>0</Alert>
+          <Critical>0</Critical>
+      </DethrottleDeviceMask>
+      <!--four states: Normal,Warning,Alert,Critical. 0 - disable de-throttling,1 - enable de-throttling, -1 - dont care-->
+    </CoolingDeviceInfo>
+  </ZoneThrottleInfo>
+</thermalthrottleconfig>

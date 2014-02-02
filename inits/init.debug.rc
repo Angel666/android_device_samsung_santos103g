@@ -1,0 +1,167 @@
+on init
+    symlink /data/log/clvp /logs
+    # Export gcov variables to enable code coverage on mobile
+    export GCOV_PREFIX /data
+    export GCOV_PREFIX_STRIP 1
+
+on early-boot
+# enable core dump function when application crash
+
+on post-fs
+    mkdir /data/tombstones 0755 system system
+    mkdir /data/system/    0755 system system
+    mkdir /data/system/dropbox 0700 system system
+
+on post-fs-data
+    setrlimit 4 -1 -1
+    mkdir /logs/core
+    chown root log /logs/core
+    chmod 0660 /logs/core
+    write /proc/sys/kernel/core_pattern /logs/core/%t_%e_%p.core
+
+    mkdir /logs/modemcrash 0775 system system
+    mkdir /logs/stats 0775 system system
+    mkdir /logs/gps 0775 system system
+    mkdir /logs/aplogs 0775 system log
+
+    # Enable by default android java wakelock logging
+    setprop wakelock.trace 1
+
+    # Collect emmc ipanic data, free resources and re-arm trigger
+    copy /proc/emmc_ipanic_console /data/dontpanic/emmc_ipanic_console
+    chown root log /data/dontpanic/emmc_ipanic_console
+    chmod 0640 /data/dontpanic/emmc_ipanic_console
+
+    copy /proc/emmc_ipanic_threads /data/dontpanic/emmc_ipanic_threads
+    chown root log /data/dontpanic/emmc_ipanic_threads
+    chmod 0640 /data/dontpanic/emmc_ipanic_threads
+
+    #you must enable next line when you don`t use crashlogd
+    #write /proc/emmc_ipanic_console 1
+
+    # Collect fabric error data, free resources and re-arm trigger
+    copy /proc/ipanic_fabric_err /data/dontpanic/ipanic_fabric_err
+    chown root log /data/dontpanic/ipanic_fabric_err
+    chmod 0640 /data/dontpanic/ipanic_fabric_err
+
+on charger
+    # basic networking for "adb root"
+    ifup lo
+    hostname localhost
+    domainname localdomain
+    mkdir /logs/modemcrash 0775 system system
+    mkdir /logs/stats 0775 system system
+    mkdir /logs/gps 0775 system system
+    mkdir /logs/aplogs 0775 system log
+    setprop persist.service.apklogfs.enable 1
+    setprop sys.usb.config iadb
+    setprop ro.debuggable 1
+
+on property:persist.core.enabled=0
+    setrlimit 4 0 0
+
+on property:persist.service.aplogfs.enable=1
+    restart ap_logfs
+
+on property:persist.service.aplogfs.enable=0
+    stop ap_logfs
+
+on property:persist.service.apklogfs.enable=1
+    restart apk_logfs
+
+on property:persist.service.apklogfs.enable=0
+    stop apk_logfs
+
+on property:persist.service.apklogsd.enable=1
+    restart apk_logsd
+
+on property:persist.service.apklogsd.enable=0
+    stop apk_logsd
+
+on property:persist.service.aplogsd.enable=1
+    restart ap_logsd
+
+on property:persist.service.aplogsd.enable=0
+    stop ap_logsd
+
+on property:persist.service.aplogpti.enable=1
+    write /sys/module/logger_pti/parameters/out "main,system,radio"
+
+on property:persist.service.aplogpti.enable=0
+    write /sys/module/logger_pti/parameters/out ""
+
+on property:persist.service.aklogpti.enable=1
+   write /sys/module/logger_pti/parameters/out "main,system,radio,kernel"
+
+on property:persist.service.aklogpti.enable=0
+   write /sys/module/logger_pti/parameters/out ""
+
+on property:persist.service.profile.enable=0
+    start profile_stop
+
+on property:persist.service.profile.enable=1
+    start profile1_init
+
+on property:persist.service.profile.enable=2
+    start profile2_init
+
+on property:persist.service.power.enable=1
+    start profile_power
+
+on property:persist.service.power.enable=0
+    stop profile_power
+
+# crash and log services
+service crashlogd /system/bin/crashlogd
+    class late_start
+
+service ap_logfs /system/bin/logcat -b system -b events -b main -b radio -n 20 -r 5000 -v threadtime -f /logs/aplog
+    class main
+    disabled
+
+service apk_logfs /system/bin/logcat -b system -b events -b main -b radio -b kernel -n 20 -r 5000 -v threadtime -f /logs/aplog
+    class main
+    disabled
+
+service apk_logsd /system/bin/logcat -b system -b events -b main -b radio -b kernel -n 20 -r 5000 -v threadtime -f /sdcard/aplog
+    disabled
+
+service ap_logsd /system/bin/logcat -b system -b events -b main -b radio -n 20 -r 5000 -v threadtime -f /sdcard/aplog
+    disabled
+
+service profile_stop /system/bin/pytimechart-record stop
+    disabled
+    oneshot
+
+service profile1_init /system/bin/pytimechart-record start_profile1
+    disabled
+    oneshot
+
+service profile1_rest /system/bin/pytimechart-record restart_profile1
+    disabled
+    oneshot
+
+service profile2_init /system/bin/pytimechart-record start_profile2
+    disabled
+    oneshot
+
+service profile2_rest /system/bin/pytimechart-record restart_profile2
+    disabled
+    oneshot
+
+service profile_power /system/bin/power-record
+    disabled
+    oneshot
+
+# LogConfig service
+service logconfig /system/bin/logconfig
+    class main
+    socket logconfig stream 0660 root system
+    disabled
+    oneshot
+
+# started by device/intel/log_capture/crashlog
+service logsystemstate /system/bin/dumpstate_dropbox.sh -v
+    class main
+    disabled
+    oneshot

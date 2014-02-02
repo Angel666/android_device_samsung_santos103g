@@ -1,0 +1,42 @@
+on init
+    setprop alsa.mixer.earpiece Headphone
+    setprop alsa.mixer.speaker Speaker
+    setprop alsa.mixer.headset Headphone
+    setprop alsa.mixer.headphone Headphone
+    setprop alsa.mixer.builtinMic Mic1
+    setprop alsa.mixer.headsetMic Mic1
+    setprop alsa.mixer.defaultCard cloverviewaudio
+    setprop alsa.mixer.defaultGain 1.0
+    setprop audiocomms.modemLib "libmamgr-xmm.so"
+    setprop audiocomms.XMM.primaryChannel "/dev/gsmtty20"
+    setprop audiocomms.XMM.secondaryChannel ""
+    setprop audiocomms.XMM.isDualSimModem false
+    setprop Audiocomms.Audience.IsPresent "true"
+    setprop Audiocomms.BT.HFP.Supported "true"
+    setprop Audiocomms.FM.Supported "true"
+    setprop Audiocomms.FM.IsAnalog "true"
+    #CSL codec delay of 20 ms due to SRC
+    setprop Audio.Media.CodecDelayMs 20
+
+    # atomisp driver depends on these modules. So load these on init. atomisp
+    # driver is loaded from "on charger" trigger as well from init.common.rc
+    insmod /lib/modules/videobuf-core.ko
+    insmod /lib/modules/videobuf-dma-contig.ko
+    insmod /lib/modules/videobuf-vmalloc.ko
+    insmod /lib/modules/videobuf2-core.ko
+    insmod /lib/modules/videobuf2-memops.ko
+
+on property:sys.boot_completed=1
+    # Defer loading modules that may require firmware till fs is ready
+# CTPCLT_FIXME : {
+    #insmod /lib/modules/ov8830.ko
+    #insmod /lib/modules/mt9m114.ko
+    #insmod /lib/modules/lm3554.ko
+# CTPCLT_FIXME : }
+    insmod /lib/modules/s5k5ccgx.ko
+    insmod /lib/modules/db8131m.ko
+    insmod /lib/modules/atomisp.ko
+
+on post-fs
+#  Permissions for Vibrator
+    chown system system /sys/devices/pci0000:00/0000:00:06.6/vibrator

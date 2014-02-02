@@ -1,0 +1,34 @@
+on init
+    # add widi directory
+    mkdir /data/widi 0770 wifi wifi
+    insmod /lib/modules/fmdrv_chr.ko
+
+    insmod /lib/modules/ipv6.ko
+
+#  Permissions for FM Radio
+    chmod 0777 /dev/tifm
+
+on post-fs-data
+    mkdir /data/misc/dhcp 0770 dhcp wifi
+
+    ## increase default value of data to be dumped on HSI wakeups
+    write /sys/module/intel_mid_hsi/parameters/wakeup_packet_len 32
+
+service ad_proxy /system/xbin/ad_proxy
+    class core
+    user root
+    group system cache misc audio
+    disabled
+
+on property:service.ad_proxy.enable=0
+    stop ad_proxy
+    setprop system.at-proxy.mode ${persist.system.at-proxy.mode}
+
+on property:service.ad_proxy.enable=1
+    stop proxy
+    stop proxy-tunneling
+    setprop sys.usb.config rndis,acm,adb
+    start ad_proxy
+
+on property:init.svc.wpa_supplicant=stopped
+    stop dhcpcd

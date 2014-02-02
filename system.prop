@@ -1,0 +1,23 @@
+#
+# system.prop for santos103g
+#
+
+rild.libpath=/system/lib/libsec-ril.so
+rild.libargs=-d /dev/ttyS0
+
+# System property for Default Brightness
+ro.lcd_brightness=118
+ro.sf.lcd_density=160
+panel.physicalWidthmm=217
+panel.physicalHeightmm=136
+ro.opengles.version=131072
+
+# System property for Min Brightness
+ro.lcd_min_brightness=10
+
+# System Property for Intel MDS
+ro.mds.enable=true
+ro.kernel.qemu=0
+
+persist.sys.storage_preload=1
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/Subsystem.xsd" Name="VIBRATOR" Type="FS" Endianness="Little">
+	<ComponentLibrary>
+		<ComponentType Name="SYSFS_FILE">
+			<BooleanParameter Name="ENABLED" Mapping="File:vibrator"/>
+		</ComponentType>
+	</ComponentLibrary>
+	<InstanceDefinition>
+		<Component Name="STATE" Type="SYSFS_FILE" Mapping="Directory:/sys/bus/pci/devices/0000:00:06.6/"/>
+	</InstanceDefinition>
+</Subsystem>

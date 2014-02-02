@@ -1,0 +1,9 @@
+# import local customization
+# board has higher precedence
+
+import props.board.rc
+import props.platform.rc
+import props.default.rc
+
+# To keep compatibility with both GB and ICS/JB implementation of init,
+# don't add any rules after 'import' instructions.

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/Subsystem.xsd" Name="LPE_MIXER" Type="AMIXER" Endianness="Little">
+	<ComponentLibrary>
+		<ComponentType Name="LPE_MIXER_TYPE">
+			<EnumParameter Name="INPUT_STREAM" Size="8" Mapping="Control:'LPE %1 mixer'">
+				<ValuePair Literal="NONE" Numerical="0"/>
+				<ValuePair Literal="PCM" Numerical="1"/>
+				<ValuePair Literal="COMPRESSED" Numerical="2"/>
+				<ValuePair Literal="MIX" Numerical="3"/>
+			</EnumParameter>
+		</ComponentType>
+		<ComponentType Name="SOUND_CARD">
+			<Component Name="IHF" Type="LPE_MIXER_TYPE" Mapping="Amend1:IHF"/>
+			<Component Name="HS" Type="LPE_MIXER_TYPE" Mapping="Amend1:headset"/>
+		</ComponentType>
+	</ComponentLibrary>
+	<InstanceDefinition>
+		<Component Name="SOUND_CARD" Type="SOUND_CARD" Mapping="Card:cloverviewaudio"/>
+	</InstanceDefinition>
+</Subsystem>

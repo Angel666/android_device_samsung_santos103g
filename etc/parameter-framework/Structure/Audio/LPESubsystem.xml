@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Schemas/Subsystem.xsd" Name="LPE" Type="LPE" Endianness="Little">
+	<ComponentLibrary>
+		<ComponentType Name="EQUALIZER">
+			<BitParameterBlock Name="FILTER_CONFIG" Size="16" Mapping="ParamId:0x102">
+				<BitParameter Name="IIR_SECTION_COUNT" Pos="0" Size="3"/>
+				<BitParameter Name="FIR_FIRST" Pos="8" Size="1"/>
+				<BitParameter Name="FIR_ENABLE" Pos="9" Size="1"/>
+				<BitParameter Name="IIR_ENABLE" Pos="10" Size="1"/>
+			</BitParameterBlock>
+			<ParameterBlock Name="FIR_COEFFS" Mapping="ParamId:0x103">
+				<FixedPointParameter Name="INPUT_GAIN" Size="16" Integral="3" Fractional="12" Unit="dB"/>
+				<FixedPointParameter Name="OUTPUT_GAIN" Size="16" Integral="3" Fractional="12"/>
+				<IntegerParameter Name="TAP_COUNT" Min="2" Max="64" Size="16"/>
+				<FixedPointParameter Name="TAPS" Size="16" Integral="0" Fractional="15" ArrayLength="64"/>
+			</ParameterBlock>
+			<ParameterBlock Name="IIR_COEFFS" Mapping="ParamId:0x104">
+				<ParameterBlock Name="SECTIONS" ArrayLength="6">
+					<IntegerParameter Size="16" Name="SN_SHIFT1" Min="-10" Max="4" Signed="true"/>
+					<IntegerParameter Size="16" Name="SN_SHIFT2" Min="-10" Max="4" Signed="true"/>
+					<FixedPointParameter Name="A2" Size="16" Integral="0" Fractional="15"/>
+					<FixedPointParameter Name="A1" Size="16" Integral="0" Fractional="15"/>
+					<FixedPointParameter Name="B2" Size="16" Integral="0" Fractional="15"/>
+					<FixedPointParameter Name="B1" Size="16" Integral="0" Fractional="15"/>
+					<FixedPointParameter Name="B0" Size="16" Integral="0" Fractional="15"/>
+				</ParameterBlock>
+				<IntegerParameter Size="16" Name="SN_SHIFT3" Min="-10" Max="4" Signed="true"/>
+			</ParameterBlock>
+		</ComponentType>
+		<ComponentType Name="MONO_EQ" Extends="EQUALIZER" Mapping="AlgoId:0x71,ParamOffset:0x4F">
+			<BooleanParameter Name="ENABLE" Mapping="AlgoEnable"/>
+		</ComponentType>
+		<ComponentType Name="STEREO_EQ" Mapping="AlgoId:0x6C">
+			<BooleanParameter Name="ENABLE" Mapping="AlgoEnable"/>
+			<BooleanParameter Name="DIFF_2_CHAN" Mapping="ParamId:0x101"/>
+			<Component Name="LEFT_EQ" Type="EQUALIZER"/>
+			<Component Name="RIGHT_EQ" Type="EQUALIZER" Mapping="ParamOffset:3"/>
+		</ComponentType>
+		<ComponentType Name="DC_REMOVAL" Mapping="AlgoId:0x6B">
+			<BooleanParameter Name="ENABLE" Mapping="AlgoEnable"/>
+			<ParameterBlock Name="IIR">
+				<ParameterBlock Name="COEFFS" Mapping="ParamId:0x302" Description="DCR IIR Coefficients">
+					<FixedPointParameter Name="B2" Size="32" Integral="0" Fractional="23"/>
+					<FixedPointParameter Name="A2" Size="32" Integral="0" Fractional="23"/>
+					<FixedPointParameter Name="B1" Size="32" Integral="0" Fractional="23"/>
+					<FixedPointParameter Name="A1" Size="32" Integral="0" Fractional="23"/>
+					<FixedPointParameter Name="B0" Size="32" Integral="0" Fractional="23"/>
+					<IntegerParameter Size="32" Name="SHIFT2" Min="0"/>
+				</ParameterBlock>
+			</ParameterBlock>
+		</ComponentType>
+		<ComponentType Name="GAIN_CTRL" Mapping="AlgoId:0x67">
+			<BooleanParameter Name="ENABLE" Mapping="AlgoEnable"/>
+			<IntegerParameter Name="CHANNELS" Size="8" Min="1" Max="2" Mapping="ParamId:0x601"/>
+			<IntegerParameter Name="GAIN" Size="8" Signed="true" Min="-96" Max="42" Mapping="ParamId:0x602" Unit="dB"/>
+		</ComponentType>
+		<ComponentType Name="MUTE_CTRL" Mapping="AlgoId:0x68">
+			<BooleanParameter Name="ENABLE" Mapping="AlgoEnable"/>
+			<IntegerParameter Name="CHANNELS" Size="8" Min="1" Max="2" Mapping="ParamId:0x701"/>
+			<ParameterBlock Name="MUTE">
+				<BooleanParameter Name="FULL" Mapping="ParamId:0x702"/>
+				<BooleanParameter Name="HALF" Mapping="ParamId:0x703"/>
+			</ParameterBlock>
+		</ComponentType>
+		<ComponentType Name="VERTEX">
+			<IntegerParameter Name="THRESHOLD" Size="16" Min="0" Max="35840" Unit="-dBfs*256" Mapping="ParamId:0x802" Description="Compressor Threshold x"/>
+			<IntegerParameter Name="SLOPE" Size="16" Min="0" Max="65535" Mapping="ParamId:0x806" Description="Slope of characteristic for loudness less than compressor threshold x"/>
+		</ComponentType>
+		<ComponentType Name="VERTEX_WITH_GAIN" Extends="VERTEX" Mapping="ParamOffset:1">
+			<IntegerParameter Name="GAIN_AT_THRESHOLD" Size="16" Min="0" Max="20480" Unit="-dBfs*256" Mapping="ParamId:0x804" Description="Grain at Threshold B"/>
+		</ComponentType>
+		<ComponentType Name="PHASE_CTRL">
+			<IntegerParameter Name="LOUDNESS_RISE_TIME" Size="16" Min="0" Max="65535" Unit="ms" Mapping="ParamId:0x809" Description="Rise time in ms during loudness attack/release"/>
+			<IntegerParameter Name="GAIN_RISE_TIME" Size="16" Min="0" Max="65535" Unit="ms" Mapping="ParamId:0x80B" Description="Rise time in ms during gain attack/release"/>
+		</ComponentType>
+		<ComponentType Name="VERTICES_TYPE">
+			<Component Name="LOWER_MOST" Type="VERTEX"/>
+			<Component Name="INTERMEDIATE" Type="VERTEX_WITH_GAIN"/>
+			<Component Name="UPPER_MOST" Type="VERTEX" Mapping="ParamOffset:2"/>
+		</ComponentType>
+		<ComponentType Name="SDRC_CTRL" Mapping="AlgoId:0x72">
+			<BooleanParameter Name="ENABLE" Mapping="AlgoEnable"/>
+			<IntegerParameter Name="NB_BANDS" Size="16" Min="1" Max="1" Mapping="ParamId:0x801" Description="Number of bands"/>
+			<Component Name="VERTICES" Type="VERTICES_TYPE"/>
+			<Component Name="ATTACK" Type="PHASE_CTRL"/>
+			<Component Name="RELEASE" Type="PHASE_CTRL" Mapping="ParamOffset:1"/>
+		</ComponentType>
+		<ComponentType Name="CAPTURE_PATH">
+			<Component Name="MONO_EQ" Type="MONO_EQ"/>
+			<Component Name="DC_REMOVAL" Type="DC_REMOVAL"/>
+			<Component Name="GAIN_CTRL" Type="GAIN_CTRL"/>
+		</ComponentType>
+		<ComponentType Name="HSEP_PLAYBACK_PATH">
+			<Component Name="MONO_EQ" Type="MONO_EQ"/>
+			<Component Name="STEREO_EQ" Type="STEREO_EQ"/>
+			<Component Name="GAIN_CTRL" Type="GAIN_CTRL"/>
+			<Component Name="MUTE_CTRL" Type="MUTE_CTRL"/>
+		</ComponentType>
+		<ComponentType Name="IHF_PLAYBACK_PATH">
+			<Component Name="STEREO_EQ" Type="STEREO_EQ"/>
+			<Component Name="GAIN_CTRL" Type="GAIN_CTRL"/>
+			<Component Name="MUTE_CTRL" Type="MUTE_CTRL"/>
+			<Component Name="SDRC_CTRL" Type="SDRC_CTRL"/>
+		</ComponentType>
+	</ComponentLibrary>
+	<InstanceDefinition>
+		<Component Name="HSEP_PATH" Type="HSEP_PLAYBACK_PATH" Mapping="PathId:0x20"/>
+		<Component Name="IHF_PATH" Type="IHF_PLAYBACK_PATH" Mapping="PathId:0x21"/>
+		<Component Name="MIC1_PATH" Type="CAPTURE_PATH" Mapping="PathId:0x22"/>
+		<Component Name="MIC2_PATH" Type="CAPTURE_PATH" Mapping="PathId:0x23"/>
+	</InstanceDefinition>
+</Subsystem>
