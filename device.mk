@@ -2,7 +2,7 @@
 $(call inherit-product, frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk)
 # Get Arm translator
 $(call inherit-product-if-exists, vendor/intel/Android.mk)
-$(call inherit-product, hardware/intel/santos103g/Android.mk)
+$(call inherit-product, hardware/intel/clovertrail/Android.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/samsung/santos103g/overlay
 
@@ -30,101 +30,35 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
         persist.system.at-proxy.mode=0 \
         persist.ril-daemon.disable=0 \
         persist.radio.ril_modem_state=1 \
-        persist.sys.usb.config=adb
+        wifi.interface=wlan0
 
-PRODUCT_AAPT_CONFIG := hdpi xhdpi
+PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := hdpi
-
 PRODUCT_CHARACTERISTICS := tablet
 
 DEVICE_PACKAGE_OVERLAYS := \
     device/samsung/santos103g/overlay
 
-# Misc Packages
+# RIL
+PRODUCT_PROPERTY_OVERRIDES += \
+    mobiledata.interfaces=rmnet0,pdp0,wlan0,gprs,ppp0 \
+    ro.telephony.call_ring.multiple=false \
+    ro.telephony.call_ring.delay=3000
+
+# Disable SELinux
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.selinux=disabled
+
+# HAL
 PRODUCT_PACKAGES += \
-    busybox \
-    perf
-    
-# rild
-PRODUCT_PACKAGES := \
-    rild \
-    BasicSmsReceiver \
-    Dialer \
-    PhoneCommon \
-    TelephonyProvider
+    gralloc.default
 
-
-# Audio
+# Clovertrail
 PRODUCT_PACKAGES += \
-    libasound \
-    audio.usb.default \
-    libaudioutils
-    
-
-# Tiny Utils
-PRODUCT_PACKAGES += \
-    libtinyalsa
-
-# Charger
-PRODUCT_PACKAGES += \
-charger \
-charger_res_images
-
-# Filesystem management tools
-PRODUCT_PACKAGES += \
-    make_ext4fs \
-    e2fsck \
-    setup_fs \
-    libext4_utils \
-    exfat
-
-# Wifi
-PRODUCT_PACKAGES += \
-    lib_driver_cmd_bcmdhd \
-    dhcpcd.conf \
-    hostapd.conf \
-    wpa_supplicant.conf \
-    crda \
-    regulatory.bin \
-    calibrator \
-    wlan_prov
-
-
-# Video
-PRODUCT_PACKAGES += \
-    libwrs_omxil_core_pvwrapped \
-    libwrs_omxil_common \
-    libva \
-    libva-tpi \
-    libva-android
-    
-
-#usb
-PRODUCT_PACKAGES += \
-    librs_jni \
-    com.android.future.usb.accessory
-
-#Camera
-PRODUCT_PACKAGES += \
-    libmmcamera_interface2 \
-    libmmcamera_interface \
-    Camera2
-
-
-# Live Wallpapers
-PRODUCT_PACKAGES += \
-        LiveWallpapers \
-        LiveWallpapersPicker \
-        VisualizationWallpapers \
-        librs_jni
-
-
-PRODUCT_PACKAGES += \
-	bdAddrLoader \
-	libwfcu \
-	conn_init \
-	charger_touch \
-        power
+    aplogd \
+    modemlog \
+    batt_health \
+    charge_only_mode
 
 # Mfld/Intel specific modules
 PRODUCT_PACKAGES += \
@@ -137,12 +71,60 @@ PRODUCT_PACKAGES += \
     libpci_static \
     libenc
 
+#Ril
+# Product specific Packages
+PRODUCT_PACKAGES += \
+    libsecril-client \
+    libsecril-client-sap \
+    Stk \
+    SamsungServiceMode
+
 # Bluetooth
 PRODUCT_PACKAGES += \
     bthelp \
     btcmd \
-    bd_prov \
-    libbluetooth-audio
+    bd_prov
+
+# Audio2
+PRODUCT_PACKAGES += \
+    audio.a2dp.default \
+    audio.usb.default \
+    audio.primary.santos103g
+#    audio.r_submix.default \
+#    libaudio-resampler \
+#    libaudioutils \
+#    libbluetooth-audio \
+#    libaudio
+
+# Tiny Utils
+PRODUCT_PACKAGES += \
+    libtinyalsa \
+    tinymix
+
+# Wifi
+PRODUCT_PACKAGES += \
+    lib_driver_cmd_bcmdhd \
+    dhcpcd.conf \
+    hostapd.conf \
+    crda \
+    regulatory.bin \
+    calibrator \
+    wlan_prov
+
+# Filesystem management tools
+PRODUCT_PACKAGES +=\
+    make_ext4fs \
+    e2fsck \
+    setup_fs \
+    libext4_utils
+
+# Video
+PRODUCT_PACKAGES += \
+    libwrs_omxil_core_pvwrapped \
+    libwrs_omxil_common \
+    libva \
+    libva-tpi \
+    libva-android
 
 # Glib tools
 PRODUCT_PACKAGES += \
@@ -160,12 +142,17 @@ PRODUCT_PACKAGES += \
 # Misc Packages
 PRODUCT_PACKAGES += \
     libwbxmlparser \
-    libnl
+    busybox \
+    perf
+
+# Charger
+PRODUCT_PACKAGES += \
+charger \
+charger_res_images
 
 PRODUCT_PACKAGES += \
-	wpa_supplicant_overlay.conf \
-	p2p_supplicant_overlay.conf
-
+    librs_jni \
+    com.android.future.usb.accessory
 
 LOCAL_PATH := device/samsung/santos103g
 
@@ -241,9 +228,26 @@ $(foreach i, $(IA_LIBS), $(i):system/lib/$(notdir $(i)))
 PRODUCT_COPY_FILES += \
 $(LOCAL_PATH)/vendor/lib/drm/libdrmwvmplugin.so:system/vendor/lib/drm/libdrmwvmplugin.so
 
-IA_PERMS := $(wildcard $(LOCAL_PATH)/permissions/*.*)
+#IA_PERMS := $(wildcard $(LOCAL_PATH)/permissions/*.*)
+#PRODUCT_COPY_FILES += \
+#$(foreach i, $(IA_PERMS), $(i):system/etc/permissions/$(notdir $(i)))
+
 PRODUCT_COPY_FILES += \
-$(foreach i, $(IA_PERMS), $(i):system/etc/permissions/$(notdir $(i)))
+frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
+frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
+frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
+frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
+frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+    frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:system/etc/permissions/android.hardware.sensor.barometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml
 
 #EGL 544
 PRODUCT_COPY_FILES += \
@@ -252,6 +256,10 @@ $(LOCAL_PATH)/vendor/lib/egl/libGLESv1_CM_POWERVR_SGX544_115.so:system/vendor/li
 $(LOCAL_PATH)/vendor/lib/egl/libGLESv2_POWERVR_SGX544_115.so:system/vendor/lib/egl/libGLESv2_POWERVR_SGX544_115.so \
 $(LOCAL_PATH)/egl.cfg:system/lib/egl/egl.cfg
 
+# APN List, Telephony permissions
+PRODUCT_COPY_FILES += \
+    device/sample/etc/apns-full-conf.xml:system/etc/apns-conf.xml \
+    frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
 
 #HW Clowertrail Blobs
 PRODUCT_COPY_FILES += \
@@ -271,8 +279,6 @@ $(foreach i, $(IA_FRM), $(i):system/framework/$(notdir $(i)))
 
 #ETC
 PRODUCT_COPY_FILES += \
-$(LOCAL_PATH)/vendor/etc/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-$(LOCAL_PATH)/vendor/etc/audio_policy.conf:system/vendor/etc/audio_policy.conf \
 $(LOCAL_PATH)/vendor/etc/nxp/LVVEFS_Rx_Configuration.txt:system/vendor/etc/nxp/LVVEFS_Rx_Configuration.txt \
 $(LOCAL_PATH)/vendor/etc/nxp/LVVEFS_Tx_Configuration.txt:system/vendor/etc/nxp/LVVEFS_Tx_Configuration.txt \
 $(LOCAL_PATH)/ramdisk/ia_watchdogd:recovery/root/ia_watchdogd \
@@ -371,7 +377,7 @@ $(LOCAL_PATH)/ramdisk/sbin/ffu:root/sbin/ffu
 #----------------------------------------------------------
 
 
-#RECOVERY TWRP
+#RECOVERY
 PRODUCT_COPY_FILES += \
 $(LOCAL_PATH)/etc/twrp.fstab:recovery/root/etc/twrp.fstab
 

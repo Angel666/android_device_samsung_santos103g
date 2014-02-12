@@ -17,7 +17,7 @@ INTEL_INGREDIENTS_VERSIONS := true
 # customize the malloced address to be 16-byte aligned
 BOARD_MALLOC_ALIGNMENT := 16
 
-TARGET_PROVIDES_POWERHAL := true
+#TARGET_PROVIDES_POWERHAL := true
 #TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
 
@@ -26,7 +26,7 @@ COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 # Security
 #BUILD_WITH_CHAABI_SUPPORT := true
 BUILD_WITH_WATCHDOG_DAEMON_SUPPORT := true
-HAVE_SELINUX := true
+#HAVE_SELINUX := true
 
 
 # Make settings
@@ -40,7 +40,7 @@ TARGET_NO_RADIOIMAGE := true
 
 
 
-#BOARD_KERNEL_CMDLINE := init=/init pci=noearly console=ttyS0 console=logk0 earlyprintk=nologger loglevel=4 hsu_dma=7 kmemleak=off androidboot.bootmedia=sdcard androidboot.hardware=santos103g androidboot.spid=xxxx:xxxx:xxxx:xxxx:xxxx:xxxx androidboot.serialno=01234567890123456789012345678901 ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on vmalloc=256M
+#BOARD_KERNEL_CMDLINE := init=/init pci=noearly console=ttyS0 console=logk0 earlyprintk=nologger loglevel=8 hsu_dma=7 kmemleak=off androidboot.bootmedia=sdcard androidboot.hardware=santos103g androidboot.spid=xxxx:xxxx:xxxx:xxxx:xxxx:xxxx androidboot.serialno=01234567890123456789012345678901 ip=50.0.0.2:50.0.0.1::255.255.255.0::usb0:on vmalloc=256M
 BOARD_KERNEL_BASE := 0x10000000
 BOARD_KERNEL_PAGESIZE := 2048
 
@@ -91,11 +91,11 @@ BOARD_VOLD_MAX_PARTITIONS := 21
 #USE_PREBUILT_RAMDISK := true
 #DEVICE_RAMDISK_CONTENT := $(LOCAL_PATH)/ramdisk
 TARGET_PROVIDES_INIT := true
-#TARGET_PROVIDES_INIT_TARGET_RC := true
+TARGET_PROVIDES_INIT_TARGET_RC := true
 
-#WiFi
+
+# Wifi
 BOARD_WLAN_DEVICE := bcmdhd
-BOARD_WLAN_DEVICE_REV := bcm4334
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
@@ -105,22 +105,20 @@ WIFI_DRIVER_FW_PATH_PARAM := "/sys/module/dhd/parameters/firmware_path"
 WIFI_DRIVER_FW_PATH_STA := "/system/etc/wifi/bcmdhd_sta.bin_b2"
 WIFI_DRIVER_FW_PATH_AP := "/system/etc/wifi/bcmdhd_apsta.bin_b2"
 WIFI_DRIVER_FW_PATH_P2P := "/system/etc/wifi/bcmdhd_p2p.bin_b2"
-WIFI_DRIVER_MODULE_NAME := "dhd"
-WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/dhd.ko"
-WIFI_DRIVER_MODULE_ARG := "firmware_path=/system/etc/wifi/bcmdhd_sta.bin_b2 nvram_path=/system/etc/wifi/nvram_net.txt"
-WIFI_DRIVER_MODULE_AP_ARG := "firmware_path=/system/etc/wifi/bcmdhd_apsta.bin_b2 nvram_path=/system/etc/wifi/nvram_net.txt"
-BOARD_HAVE_SAMSUNG_WIFI := true
+WIFI_DRIVER_MODULE_ARG := "iface_name=wlan0 firmware_path=/system/etc/wifi/bcmdhd_sta.bin_b2 nvram_path=/system/etc/wifi/nvram_net.txt"
+
+
 
 # Blutetooth
 BOARD_HAVE_BLUETOOTH := true
-#BOARD_HAVE_BLUETOOTH_BCM := true
+BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_HAVE_SAMSUNG_BLUETOOTH := true
 
 # Audio
 #COMMON_GLOBAL_CFLAGS += -DICS_AUDIO_BLOB
-BOARD_USES_ALSA_AUDIO := true
-BUILD_WITH_ALSA_UTILS := true
-
+#BOARD_USES_ALSA_AUDIO := true
+#BUILD_WITH_ALSA_UTILS := true
+#BOARD_USES_TINYHAL_AUDIO := true
 # Charging mode
 #BOARD_CHARGING_MODE_BOOTING_LPM := /sys/class/power_supply/battery/batt_lp_charging
 #BOARD_BATTERY_DEVICE_NAME := "battery"
@@ -128,10 +126,14 @@ BUILD_WITH_ALSA_UTILS := true
 # GPS
 BOARD_HAVE_GPS := true
 
+#INTEL_CAMERA := true
+# select libcamera2 as the camera HAL
+USE_CAMERA_HAL2 := true
+
 #HW_Renderer
-INTEL_HWC := true
+#INTEL_HWC := true
 #LIBENC_INCLUDED := true
-#BOARD_USES_HWCOMPOSER := true
+BOARD_USES_HWCOMPOSER := true
 #USE_INTEL_UFO_DRIVER := true
 USE_OPENGL_RENDERER := true
 BOARD_EGL_CFG := $(LOCAL_PATH)/egl.cfg
@@ -171,4 +173,6 @@ TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
 TW_EXTERNAL_STORAGE_PATH := "/sdcard"
 TW_EXTERNAL_STORAGE_MOUNT_POINT := "sdcard"
 
+# Custom Tools
+TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/samsung/santos103g/releasetools/santos103g_ota_from_target_files
 

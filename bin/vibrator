@@ -1,0 +1,2 @@
+#!/system/bin/sh
+remote-process localhost 5003 $*
